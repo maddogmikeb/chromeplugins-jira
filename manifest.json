@@ -1,0 +1,25 @@
+{
+    "manifest_version": 2,
+    "name": "Fix things that shit me about Jira",
+    "version": "0.0.1",
+    "minimum_chrome_version": "78.0.3904.108",
+    "content_scripts": [
+        {
+            "matches": [
+                "*://*.atlassian.net/*"
+            ],
+            "js": [
+                "utils.js",
+                "content.js"
+            ]
+        }
+    ],
+    "browser_action": {
+        "default_icon": "icon.png"
+    },
+    "background": {
+        "scripts": [
+            "background.js"
+        ]
+    }
+}
