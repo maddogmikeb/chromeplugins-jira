@@ -3,7 +3,7 @@
 var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
 
 var utils = {
-    removeAllChildren: function (node) {
+    removeAllChildren: function(node) {
         var child = node.lastElementChild;
         while (child) {
             try {
@@ -14,10 +14,10 @@ var utils = {
             }
         }
     },
-    getJSON: function (url, success, failure) {
+    getJSON: function(url, success, failure) {
         var request = new XMLHttpRequest();
         request.open('GET', url, true);
-        request.onload = function () {
+        request.onload = function() {
             try {
                 if (request.status >= 200 && request.status < 400) {
                     var data = JSON.parse(this.response);
@@ -31,20 +31,20 @@ var utils = {
         }
         request.send();
     },
-    pagedJIRA: function (url, field, success, failure) {
-        utils.getJSON(url + "maxResults=100&startAt=0", function (data) {
+    pagedJIRA: function(url, field, success, failure) {
+        utils.getJSON(url + "maxResults=100&startAt=0", function(data) {
             try {
                 var startAt = 100;
                 var total = data.total;
                 var pages = [data[field]];
                 while (startAt <= total) {
-                    pages.push(new Promise(function (resolve, reject) {
-                        utils.getJSON(url + "&maxResults=100&startAt=" + startAt, function (data) {
+                    pages.push(new Promise(function(resolve, reject) {
+                        utils.getJSON(url + "&maxResults=100&startAt=" + startAt, function(data) {
                             resolve(data[field]);
                         }, failure);
                     }));
                 }
-                Promise.all(pages).then(function (results) {
+                Promise.all(pages).then(function(results) {
                     try {
                         results = results.flat();
                         success(results);
@@ -57,8 +57,8 @@ var utils = {
             }
         }, failure);
     },
-    observeChanges: function (node, config, execute) {
-        var observer = new MutationObserver(function () {
+    observeChanges: function(node, config, execute) {
+        var observer = new MutationObserver(function() {
             observer.disconnect();
             execute();
             observer.observe(node, config);
@@ -66,16 +66,15 @@ var utils = {
         execute();
         observer.observe(node, config);
     },
-    convertHex: function (hex, opacity) {
+    convertHex: function(hex, opacity) {
         if (hex.startsWith("rgb(")) {
             return hex.replace("rgb", "rgba").replace(")", ',' + opacity + ')');
         } else {
             hex = hex.replace('#', '');
-            r = parseInt(hex.substring(0, 2), 16);
-            g = parseInt(hex.substring(2, 4), 16);
-            b = parseInt(hex.substring(4, 6), 16);
-            result = 'rgba(' + r + ',' + g + ',' + b + ',' + opacity + ')';
-            return result;
+            var r = parseInt(hex.substring(0, 2), 16);
+            var g = parseInt(hex.substring(2, 4), 16);
+            var b = parseInt(hex.substring(4, 6), 16);
+            return 'rgba(' + r + ',' + g + ',' + b + ',' + opacity + ')';
         }
     }
 }
