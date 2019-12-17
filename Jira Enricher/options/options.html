@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Jira Enricher - Options</title>
+    <style type="text/css">
+        body {
+            margin: 10px;
+            white-space: nowrap;
+        }
+        
+        #container {
+            align-items: center;
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+    <script src="options.js"></script>
+</head>
+
+<body>
+    <div id="container">
+        <dl id="checkboxes">
+            <dt>Options:</dt>
+            <dd>
+                <input type="checkbox" id="addRank" />
+                <label for="addRank">Add Rank</label>
+            </dd>
+            <dd>
+                <input type="checkbox" id="fixColors" />
+                <label for="fixColors">Fix Colours</label>
+            </dd>
+            <dd>
+                <input type="checkbox" id="fixFlags" />
+                <label for="fixFlags">Fix Flags</label>
+            </dd>
+            <dd>
+                <input type="checkbox" id="fixSubtasks" />
+                <label for="fixSubtasks">Fix Subtasks</label>
+            </dd>
+        </dl>
+        <span id="status"></span>
+    </div>
+</body>
+
+</html>

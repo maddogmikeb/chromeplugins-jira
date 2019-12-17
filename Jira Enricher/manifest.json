@@ -8,23 +8,27 @@
     "description": "This extension fixes some of the flaws of Jira's kanban boards!",
     "minimum_chrome_version": "78.0.3904.108",
     "permissions": [
-        "declarativeContent"
+        "declarativeContent",
+        "activeTab",
+        "storage"
     ],
-    "content_scripts": [
-        {
-            "run_at": "document_idle",
-            "matches": [
-                "*://*.atlassian.net/*"
-            ],
-            "css": [
-                "style/extension.css"
-            ],
-            "js": [
-                "scripts/utils.js",
-                "scripts/content.js"
-            ]
-        }
-    ],
+    "content_scripts": [{
+        "run_at": "document_idle",
+        "matches": [
+            "*://*.atlassian.net/*"
+        ],
+        "css": [
+            "style/extension.css"
+        ],
+        "js": [
+            "scripts/utils.js",
+            "scripts/content.js"
+        ]
+    }],
+    "options_ui": {
+        "page": "options/options.html",
+        "open_in_tab": false
+    },
     "page_action": {
         "default_icon": {
             "16": "images/icon16.png",

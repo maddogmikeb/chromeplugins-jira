@@ -3,6 +3,11 @@
 var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
 
 var utils = {
+    createElementFromHTML: function(elem, htmlString) {
+        var div = elem.createElement ? elem.createElement('div') : elem.ownerDocument.createElement('div');
+        div.innerHTML = htmlString.trim();
+        return div.firstChild;
+    },
     removeAllChildren: function(node) {
         var child = node.lastElementChild;
         while (child) {
