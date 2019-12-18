@@ -22,6 +22,8 @@
         ],
         "js": [
             "scripts/utils.js",
+            "scripts/defaultOptions.js",
+            "scripts/enrich.js",
             "scripts/content.js"
         ]
     }],

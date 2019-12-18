@@ -16,13 +16,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     chrome.storage.sync.get("options", function(storage) {
-        if (!chrome.runtime.lastError) {
-            var options = storage.options;
-            addRank.checked = options.addRank;
-            fixColors.checked = options.fixColors;
-            fixFlags.checked = options.fixFlags;
-            fixSubtasks.checked = options.fixSubtasks;
-        }
+        var options = (!chrome.runtime.lastError ? (storage.options ? storage.options : defaultOptions) : defaultOptions);
+        addRank.checked = options.addRank;
+        fixColors.checked = options.fixColors;
+        fixFlags.checked = options.fixFlags;
+        fixSubtasks.checked = options.fixSubtasks;
     });
 
     addRank.addEventListener('change', save, false);
