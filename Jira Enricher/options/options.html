@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
 
 <head>
@@ -19,24 +19,39 @@
 </head>
 
 <body>
+    <div>
+        Jira Enricher is to fill the gaps that we have seen in Jira. There are plenty. Therefore, this extension will continue to grow.
+    </div>
     <div id="container">
         <dl id="checkboxes">
             <dt>Options:</dt>
             <dd>
                 <input type="checkbox" id="addRank" />
                 <label for="addRank">Add Rank</label>
+                <div style="font-style: italic;">
+                    Displays a number that denotes the rank within the visible items, excluding done items.
+                </div>
             </dd>
             <dd>
                 <input type="checkbox" id="fixColors" />
                 <label for="fixColors">Fix Colours</label>
+                <div style="font-style: italic;">
+                    Changes the card colour to a lighter version of the 'bar' - depends on board card colours to be set up.
+                </div>
             </dd>
             <dd>
                 <input type="checkbox" id="fixFlags" />
                 <label for="fixFlags">Fix Flags</label>
+                <div style="font-style: italic;">
+                    Adds a hover-over containing the comment used when flagging an item (last comment with text in it).
+                </div>
             </dd>
             <dd>
                 <input type="checkbox" id="fixSubtasks" />
                 <label for="fixSubtasks">Fix Subtasks</label>
+                <div style="font-style: italic;">
+                    Adds a hover-over containing the sub-task details including status, name and assignee (sub-tasks must be added to the card layout).
+                </div>
             </dd>
         </dl>
         <span id="status"></span>
