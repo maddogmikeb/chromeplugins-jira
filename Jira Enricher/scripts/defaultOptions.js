@@ -5,4 +5,4 @@ var defaultOptions = {
     fixColors: true,
     fixFlags: true,
     fixSubtasks: true,
-}
+};

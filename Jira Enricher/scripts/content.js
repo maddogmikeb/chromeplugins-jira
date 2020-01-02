@@ -15,9 +15,7 @@ chrome.storage.sync.onChanged.addListener(function(changes) {
 });
 
 chrome.storage.sync.get(['options', 'bar'], function(storage) {
-    var options = (!chrome.runtime.lastError ? (storage.options ? storage.options : defaultOptions) : defaultOptions);
-
-    function start(options) {
+    (function(options) {
         function getOrderedColumns(board) {
             var heads = [].map.call(board.querySelectorAll("ul.ghx-column-headers > li.ghx-column"), function(elm) {
                 return elm;
@@ -85,7 +83,5 @@ chrome.storage.sync.get(['options', 'bar'], function(storage) {
         chrome.runtime.sendMessage({
             showIcon: boards.length > 0
         });
-    }
-
-    start(options);
+    })((!chrome.runtime.lastError ? (storage.options ? storage.options : defaultOptions) : defaultOptions));
 });

@@ -46,13 +46,13 @@ var utils = {
                     pages.push(new Promise(function(resolve, reject) {
                         utils.getJSON(url + "&maxResults=100&startAt=" + startAt, function(data) {
                             resolve(data[field]);
-                        }, failure);
+                        }, reject);
                     }));
+                    startAt += 100;
                 }
                 Promise.all(pages).then(function(results) {
                     try {
-                        results = results.flat();
-                        success(results);
+                        success(results.flat());
                     } catch (e) {
                         if (failure) failure(e);
                     }

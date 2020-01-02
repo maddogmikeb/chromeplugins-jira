@@ -7,7 +7,7 @@ function iconShowHide(msg) {
     }, function(tabs) {
         var activeTab = tabs[0];
         if (!activeTab || !activeTab.id) return;
-        var suffix = "\r\nDisabled on page - No boards to enrich";
+        var suffix = `\r\nDisabled on page - No boards to enrich`;
         chrome.pageAction.show(activeTab.id);
         chrome.pageAction.getTitle({
             tabId: activeTab.id
