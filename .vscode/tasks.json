@@ -40,7 +40,7 @@
     "tasks": [{
             "label": "Build",
             "type": "shell",
-            "command": "& '${fileDirname}\\build.ps1'",
+            "command": "& '${workspaceFolder}\\.vscode\\build.ps1'",
             "group": {
                 "kind": "build",
                 "isDefault": true
@@ -50,7 +50,7 @@
         {
             "label": "Test",
             "type": "shell",
-            "command": "& '${fileDirname}\\test.ps1'",
+            "command": "& '${workspaceFolder}\\.vscode\\test.ps1'",
             "group": {
                 "kind": "test",
                 "isDefault": true
