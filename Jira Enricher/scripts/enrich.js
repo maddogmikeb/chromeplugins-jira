@@ -48,7 +48,7 @@ function enrichIssue(options, issue, index) {
 
     function fixSubtasks(issue) {
         function getSubTasks(field, key) {
-            utils.pagedJIRA(`${baseUrl}/rest/api/2/search?jql=issuetype in subTaskIssueTypes() and parent=${key}&fields=key,status,statuscategorychangedate,assignee,summary&`, "issues", function(subtasks) {
+            utils.pagedJIRA(`${baseUrl}/rest/api/2/search?jql=issuetype in subTaskIssueTypes() and parent=${key}&fields=key,status,statuscategorychangedate,assignee,summary,issuetype&`, "issues", function(subtasks) {
                     var subtaskHTMLs = [];
                     var subtaskDataTable = "";
                     var done = 0;
@@ -81,7 +81,8 @@ function enrichIssue(options, issue, index) {
                         subtaskDataTable += `
                             <div style="margin-bottom: 3px;">
                                 <div style="display: inline-block; position: relative; margin: auto; padding: 0; outline: 0px; height: 16px; width: 100%;">
-                                    <div style="display: inline-block; position: relative; outline: 0px; height: 16px; width: 64px; float: left;">
+                                    <div style="display: inline-block; position: relative; outline: 0px; height: 16px; width: 74px; float: left;">
+                                        <img src="${subtask.fields.issuetype.iconUrl}" tooltip="${subtask.fields.issuetype.name}" / >
                                         ${subtask.key}
                                     </div>
                                     <div class="aui-lozenge aui-lozenge-overflow ${status} fusion-widget-tooltip" style="text-align: center;">
