@@ -24,6 +24,7 @@
             "scripts/utils.js",
             "scripts/defaultOptions.js",
             "scripts/enrich.js",
+            "scripts/serviceDeskEnricher.js",
             "scripts/content.js"
         ]
     }],

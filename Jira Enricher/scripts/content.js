@@ -80,6 +80,15 @@ chrome.storage.sync.get(['options', 'bar'], function(storage) {
             });
         });
 
+        if (options.fixServiceDeskQueues) {
+            utils.waitForElement(document, "div[data-test-id='servicedesk-queues-agent-view.layout.layout']").then(function() {
+                enrichServiceDeskQueues(options, document);
+                chrome.runtime.sendMessage({
+                    showIcon: true
+                });
+            });
+        }
+
         chrome.runtime.sendMessage({
             showIcon: boards.length > 0
         });

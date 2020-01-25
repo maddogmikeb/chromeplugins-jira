@@ -71,6 +71,31 @@ var utils = {
         execute();
         observer.observe(node, config);
     },
+    waitForElement: function(node, selector) {
+        return new Promise(function(resolve, reject) {
+            utils.waitForElements(node, selector).then(function(founds) {
+                resolve(founds[0]);
+            });
+        });
+    },
+    waitForElements: function(node, selector) {
+        return new Promise(function(resolve, reject) {
+            var found = node.querySelectorAll(selector);
+            if (found.length > 0) {
+                resolve(found);
+                return;
+            }
+            var observer = new MutationObserver(function() {
+                var found = node.querySelectorAll(selector);
+                if (found.length > 0) {
+                    observer.disconnect();
+                    resolve(found);
+                    return;
+                }
+            });
+            observer.observe(node, { childList: true, subtree: true });
+        });
+    },
     convertHex: function(hex, opacity) {
         if (hex.startsWith("rgb(")) {
             return hex.replace("rgb", "rgba").replace(")", ',' + opacity + ')');

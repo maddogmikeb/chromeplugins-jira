@@ -5,4 +5,6 @@ var defaultOptions = {
     fixColors: true,
     fixFlags: true,
     fixSubtasks: true,
+    fixServiceDeskQueues: true,
+    seperator: " - ",
 };

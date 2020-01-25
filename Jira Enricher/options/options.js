@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var fixColors = document.querySelector("#fixColors");
     var fixFlags = document.querySelector("#fixFlags");
     var fixSubtasks = document.querySelector("#fixSubtasks");
+    var fixServiceDeskQueues = document.querySelector("#fixServiceDeskQueues");
 
     function save() {
         chrome.storage.sync.set({
@@ -11,6 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 fixColors: fixColors.checked,
                 fixFlags: fixFlags.checked,
                 fixSubtasks: fixSubtasks.checked,
+                fixServiceDeskQueues: fixServiceDeskQueues.checked,
             }
         });
     }
@@ -21,10 +23,13 @@ document.addEventListener('DOMContentLoaded', function() {
         fixColors.checked = options.fixColors;
         fixFlags.checked = options.fixFlags;
         fixSubtasks.checked = options.fixSubtasks;
+        fixServiceDeskQueues.checked = options.fixServiceDeskQueues;
+
     });
 
     addRank.addEventListener('change', save, false);
     fixColors.addEventListener('change', save, false);
     fixFlags.addEventListener('change', save, false);
     fixSubtasks.addEventListener('change', save, false);
+    fixServiceDeskQueues.addEventListener('change', save, false);
 });
