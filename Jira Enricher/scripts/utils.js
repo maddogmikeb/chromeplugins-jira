@@ -19,48 +19,50 @@ var utils = {
             }
         }
     },
-    getJSON: function(url, success, failure) {
-        var request = new XMLHttpRequest();
-        request.open('GET', url, true);
-        request.onload = function() {
-            try {
-                if (request.status >= 200 && request.status < 400) {
-                    var data = JSON.parse(this.response);
-                    if (success) success(data);
-                } else {
-                    if (failure) failure(request.statusText);
-                }
-            } catch (e) {
-                if (failure) failure(e);
-            }
-        }
-        request.send();
-    },
-    pagedJIRA: function(url, field, success, failure) {
-        utils.getJSON(url + "maxResults=100&startAt=0", function(data) {
-            try {
-                var startAt = 100;
-                var total = data.total;
-                var pages = [data[field]];
-                while (startAt <= total) {
-                    pages.push(new Promise(function(resolve, reject) {
-                        utils.getJSON(url + "&maxResults=100&startAt=" + startAt, function(data) {
-                            resolve(data[field]);
-                        }, reject);
-                    }));
-                    startAt += 100;
-                }
-                Promise.all(pages).then(function(results) {
-                    try {
-                        success(results.flat());
-                    } catch (e) {
-                        if (failure) failure(e);
+    getJSON: function(url) {
+        return new Promise(function(success, failure) {
+            var request = new XMLHttpRequest();
+            request.open('GET', url, true);
+            request.onload = function() {
+                try {
+                    if (request.status >= 200 && request.status < 400) {
+                        var data = JSON.parse(this.response);
+                        if (success) success(data);
+                    } else {
+                        if (failure) failure(request.statusText);
                     }
-                });
-            } catch (e) {
-                if (failure) failure(e);
+                } catch (e) {
+                    if (failure) failure(e);
+                }
             }
-        }, failure);
+            request.send();
+        });
+    },
+    pagedJIRA: function(url, field) {
+        return new Promise(function(success, failure) {
+            utils.getJSON(url + "maxResults=100&startAt=0").then(function(data) {
+                try {
+                    var startAt = 100;
+                    var total = data.total;
+                    var pages = [data[field]];
+                    while (startAt <= total) {
+                        pages.push(utils.getJSON(url + "&maxResults=100&startAt=" + startAt));
+                        startAt += 100;
+                    }
+                    Promise.all(pages).then(function(results) {
+                        try {
+                            success(results[field].flat());
+                        } catch (e) {
+                            if (failure) failure(e);
+                        }
+                    });
+                } catch (e) {
+                    if (failure) failure(e);
+                }
+            }).catch(function(err) {
+                failure(err);
+            });
+        });
     },
     observeChanges: function(node, config, execute) {
         var observer = new MutationObserver(function() {

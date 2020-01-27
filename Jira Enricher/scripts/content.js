@@ -1,21 +1,29 @@
-/*
-This extension fixes some of the flaws of Jira's kanban boards by showing more detail on mouseover for flags, sub-tasks, and changing the whole card colour (not just the bar down the side!). More to come, please leave a comment :)
-http://www.smexdigital.com
-*/
 'use strict'
+
+Array.prototype.remByVal = function(val) {
+    for (var i = 0; i < this.length; i++) {
+        if (this[i] === val) {
+            this.splice(i, 1);
+            i--;
+        }
+    }
+    return this;
+}
 
 chrome.runtime.sendMessage({
     showIcon: false
 });
 
 chrome.storage.sync.onChanged.addListener(function(changes) {
-    chrome.runtime.sendMessage({
-        refreshPage: true
-    });
+    if (!changes.hasOwnProperty('expandedQueues')) {
+        chrome.runtime.sendMessage({
+            refreshPage: true
+        });
+    }
 });
 
-chrome.storage.sync.get(['options', 'bar'], function(storage) {
-    (function(options) {
+chrome.storage.sync.get(['options', 'expandedQueues'], function(storage) {
+    (function(options, expandedQueues) {
         function getOrderedColumns(board) {
             var heads = [].map.call(board.querySelectorAll("ul.ghx-column-headers > li.ghx-column"), function(elm) {
                 return elm;
@@ -80,17 +88,21 @@ chrome.storage.sync.get(['options', 'bar'], function(storage) {
             });
         });
 
+        chrome.runtime.sendMessage({
+            showIcon: boards.length > 0
+        });
+
         if (options.fixServiceDeskQueues) {
             utils.waitForElement(document, "div[data-test-id='servicedesk-queues-agent-view.layout.layout']").then(function() {
-                enrichServiceDeskQueues(options, document);
+                enrichServiceDeskQueues(options, document, expandedQueues);
                 chrome.runtime.sendMessage({
                     showIcon: true
                 });
             });
         }
-
-        chrome.runtime.sendMessage({
-            showIcon: boards.length > 0
-        });
-    })((!chrome.runtime.lastError ? (storage.options ? storage.options : defaultOptions) : defaultOptions));
+    })
+    (
+        (!chrome.runtime.lastError ? (storage.options ? storage.options : defaultOptions) : defaultOptions),
+        (!chrome.runtime.lastError ? (storage.expandedQueues ? storage.expandedQueues : []) : [])
+    );
 });
