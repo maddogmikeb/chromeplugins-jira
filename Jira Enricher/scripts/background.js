@@ -48,8 +48,6 @@ chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
         });
     }
 
-    console.log(msg);
-
     if (msg.hasOwnProperty('showIcon')) {
         iconShowHide(msg);
     }
@@ -61,6 +59,7 @@ chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
     }
 });
 
+/*
 chrome.runtime.onInstalled.addListener(function() {
     chrome.declarativeContent.onPageChanged.removeRules(undefined, function() {
         chrome.declarativeContent.onPageChanged.addRules([{
@@ -73,6 +72,16 @@ chrome.runtime.onInstalled.addListener(function() {
                 })
             ],
             actions: [new chrome.declarativeContent.ShowPageAction()]
+        }, {
+            conditions: [
+                new chrome.declarativeContent.PageStateMatcher({
+                    url: {
+                        urlContains: "/servicedesk/"
+                    }
+                })
+            ],
+            actions: [new chrome.declarativeContent.ShowPageAction()]
         }]);
     });
 });
+*/

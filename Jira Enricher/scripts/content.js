@@ -76,11 +76,10 @@ chrome.storage.sync.get(['options', 'expandedQueues'], function(storage) {
 
         var boards = document.querySelectorAll("#ghx-work, #ghx-plan");
         boards.forEach(function(board) {
-            var config = {
+            utils.observeChanges(board, {
                 subtree: true,
                 childList: true
-            };
-            utils.observeChanges(board, config, function() {
+            }, function() {
                 var issues = getOrderedIssues(board);
                 issues.forEach(function(issue, index) {
                     enrichIssue(options, issue, index);
@@ -93,12 +92,22 @@ chrome.storage.sync.get(['options', 'expandedQueues'], function(storage) {
         });
 
         if (options.fixServiceDeskQueues) {
-            utils.waitForElement(document, "div[data-test-id='servicedesk-queues-agent-view.layout.layout']").then(function() {
-                enrichServiceDeskQueues(options, document, expandedQueues);
-                chrome.runtime.sendMessage({
-                    showIcon: true
-                });
-            });
+            if (window.location.href.indexOf("/servicedesk/projects/") > -1) {
+                var frontEnd = document.querySelector("div[id='jira-frontend']");
+                if (frontEnd) {
+                    utils.observeChanges(frontEnd, {
+                        subtree: true,
+                        childList: true
+                    }, function() {
+                        utils.waitForElement(frontEnd, "div[data-rbd-droppable-id='sd-queues-custom']").then(function() {
+                            enrichServiceDeskQueues(options, frontEnd, expandedQueues);
+                            chrome.runtime.sendMessage({
+                                showIcon: true
+                            });
+                        });
+                    });
+                }
+            }
         }
     })
     (

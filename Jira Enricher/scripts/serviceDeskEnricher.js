@@ -2,15 +2,12 @@
 
 function enrichServiceDeskQueues(options, document, expandedQueues) {
     if (!Array.isArray(expandedQueues)) expandedQueues = [];
-    console.log(`expandedQueues: ${expandedQueues.join(",")}`);
     var sep = options.seperator;
 
     function fixQueues(headerQueues) {
         function onclick(e) {
             var el = e.srcElement;
-            while (!el.dataset.enriched) {
-                el = el.parentElement;
-            }
+            while (!el.dataset.enriched) el = el.parentElement;
             if (el.dataset.enriched == "hide") {
                 document.querySelectorAll(`div[class='enrichedQueuesHide'][data-key='${el.dataset.key}']`).forEach(function(q) {
                     q.className = "enrichedQueuesShow";
@@ -24,9 +21,13 @@ function enrichServiceDeskQueues(options, document, expandedQueues) {
                 el.dataset.enriched = "hide";
                 expandedQueues.remByVal(el.dataset.key);
             }
-            chrome.runtime.sendMessage({
-                expandedQueues: expandedQueues
-            });
+            try {
+                chrome.runtime.sendMessage({
+                    expandedQueues: expandedQueues
+                });
+            } catch (e) {
+                console.error("Jira Enricher: " + e);
+            }
             e.preventDefault();
         }
 
@@ -34,10 +35,10 @@ function enrichServiceDeskQueues(options, document, expandedQueues) {
             var queues = headerQueues[key];
             if (!queues || !Array.isArray(queues)) continue;
             var total = 0;
-            queues.forEach(function(que, index) {
+            queues.forEach(function(que) {
                 que.querySelectorAll("div").forEach(function(t) {
                     if (t.innerText.includes(key + sep)) {
-                        t.innerText = t.innerText.replace(key + sep, "◦ ");
+                        t.innerText = t.innerText.replace(key + sep, "• ");
                     }
                 });
                 que.dataset.key = key;
@@ -45,8 +46,7 @@ function enrichServiceDeskQueues(options, document, expandedQueues) {
                 try {
                     total += parseInt(que.querySelector("span").innerText);
                 } catch (e) {
-                    console.error(`Unable to get count for ${key}`);
-                    total += 0;
+                    console.error(`Jira Enricher: Unable to get count for ${key}`);
                 }
             });
             var a = utils.createElementFromHTML(document, `<div draggable="false" data-testid="NavigationItem" data-key="${key}" class="css-16x8mro" data-enriched="${expandedQueues.includes(key) ? "show" : "hide"}" style="cursor: auto;"></div>`);

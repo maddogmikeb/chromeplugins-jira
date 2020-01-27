@@ -43,7 +43,7 @@ function enrichIssue(options, issue, index) {
                     }
                 });
             }).catch(function(err) {
-                console.error(err);
+                console.error("Jira Enricher: " + err);
             });
         });
     }
@@ -119,7 +119,7 @@ function enrichIssue(options, issue, index) {
                 subtaskHTMLs.reverse();
                 field.querySelector("span.ghx-extra-field-content").innerHTML = subtaskHTMLs.join(", ");
             }).catch(function(err) {
-                console.error(err);
+                console.error("Jira Enricher: " + err);
             });
         }
 
