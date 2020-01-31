@@ -29,9 +29,9 @@
 }
 
 .enrichedQueuesShow {
-    display: block;
+    display: block !important;
 }
 
 .enrichedQueuesHide {
-    display: none;
+    display: none !important;
 }
