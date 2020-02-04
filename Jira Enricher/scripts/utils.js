@@ -64,14 +64,14 @@ var utils = {
             });
         });
     },
-    observeChanges: function(node, config, execute) {
+    observeChanges: function(node, execute) {
         var observer = new MutationObserver(function() {
             observer.disconnect();
             execute();
-            observer.observe(node, config);
+            observer.observe(node, { childList: true, subtree: true });
         });
         execute();
-        observer.observe(node, config);
+        observer.observe(node, { childList: true, subtree: true });
     },
     waitForElement: function(node, selector) {
         return new Promise(function(resolve, reject) {

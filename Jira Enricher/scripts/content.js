@@ -76,10 +76,7 @@ chrome.storage.sync.get(['options', 'expandedQueues'], function(storage) {
 
         var boards = document.querySelectorAll("#ghx-work, #ghx-plan");
         boards.forEach(function(board) {
-            utils.observeChanges(board, {
-                subtree: true,
-                childList: true
-            }, function() {
+            utils.observeChanges(board, function() {
                 var issues = getOrderedIssues(board);
                 issues.forEach(function(issue, index) {
                     enrichIssue(options, issue, index);
@@ -92,21 +89,16 @@ chrome.storage.sync.get(['options', 'expandedQueues'], function(storage) {
         });
 
         if (options.fixServiceDeskQueues) {
-            if (window.location.href.indexOf("/servicedesk/projects/") > -1) {
-                var frontEnd = document.querySelector("div[id='jira-frontend']");
-                if (frontEnd) {
-                    utils.observeChanges(frontEnd, {
-                        subtree: true,
-                        childList: true
-                    }, function() {
-                        utils.waitForElement(frontEnd, "div[data-rbd-droppable-id='sd-queues-custom']").then(function() {
-                            enrichServiceDeskQueues(options, frontEnd, expandedQueues);
-                            chrome.runtime.sendMessage({
-                                showIcon: true
-                            });
+            var frontEnd = document.querySelector("div[id='jira-frontend']");
+            if (frontEnd) {
+                utils.observeChanges(frontEnd, function() {
+                    utils.waitForElement(frontEnd, "div[data-rbd-droppable-id='sd-queues-custom']").then(function() {
+                        enrichServiceDeskQueues(options, frontEnd, expandedQueues);
+                        chrome.runtime.sendMessage({
+                            showIcon: true
                         });
                     });
-                }
+                });
             }
         }
     })
