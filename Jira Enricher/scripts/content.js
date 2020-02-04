@@ -93,10 +93,10 @@ chrome.storage.sync.get(['options', 'expandedQueues'], function(storage) {
             if (frontEnd) {
                 utils.observeChanges(frontEnd, function() {
                     utils.waitForElement(frontEnd, "div[data-rbd-droppable-id='sd-queues-custom']").then(function() {
-                        enrichServiceDeskQueues(options, frontEnd, expandedQueues);
                         chrome.runtime.sendMessage({
                             showIcon: true
                         });
+                        enrichServiceDeskQueues(options, frontEnd, expandedQueues);
                     });
                 });
             }

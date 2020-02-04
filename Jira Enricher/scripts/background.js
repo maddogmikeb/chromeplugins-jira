@@ -8,8 +8,12 @@ chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
         }, function(tabs) {
             var activeTab = tabs[0];
             if (!activeTab || !activeTab.id) return;
-            var suffix = `\r\nDisabled on page - No boards to enrich`;
+            var suffix = `\r\nDisabled - No jira elements to enrich`;
             chrome.pageAction.show(activeTab.id);
+            chrome.pageAction.setIcon({
+                tabId: activeTab.id,
+                path: "images/icon48.png"
+            });
             chrome.pageAction.getTitle({
                 tabId: activeTab.id
             }, function(title) {
@@ -58,30 +62,3 @@ chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
         saveExpandedQueues(msg, sender);
     }
 });
-
-/*
-chrome.runtime.onInstalled.addListener(function() {
-    chrome.declarativeContent.onPageChanged.removeRules(undefined, function() {
-        chrome.declarativeContent.onPageChanged.addRules([{
-            conditions: [
-                new chrome.declarativeContent.PageStateMatcher({
-                    css: ["#ghx-work"]
-                }),
-                new chrome.declarativeContent.PageStateMatcher({
-                    css: ["#ghx-plan"]
-                })
-            ],
-            actions: [new chrome.declarativeContent.ShowPageAction()]
-        }, {
-            conditions: [
-                new chrome.declarativeContent.PageStateMatcher({
-                    url: {
-                        urlContains: "/servicedesk/"
-                    }
-                })
-            ],
-            actions: [new chrome.declarativeContent.ShowPageAction()]
-        }]);
-    });
-});
-*/
