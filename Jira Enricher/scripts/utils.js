@@ -51,7 +51,11 @@ var utils = {
                     }
                     Promise.all(pages).then(function(results) {
                         try {
-                            success(results[field].flat());
+                            if (results[field]) {
+                                success(results[field].flat());
+                            } else {
+                                success(results.flat());
+                            }
                         } catch (e) {
                             if (failure) failure(e);
                         }
