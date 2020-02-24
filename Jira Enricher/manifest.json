@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "Jira Enricher",
-    "version": "1.0.7",
+    "version": "1.0.8",
     "author": "Mike Burns",
     "homepage_url": "http://www.smexdigital.com",
     "default_locale": "en_GB",

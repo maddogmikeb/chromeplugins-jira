@@ -43,7 +43,7 @@ function enrichIssue(options, issue, index) {
                     }
                 });
             }).catch(function(err) {
-                console.error("Jira Enricher: " + err);
+                console.error([`Jira Enricher: Getting paged jira comments`, err]);
             });
         });
     }
@@ -119,7 +119,7 @@ function enrichIssue(options, issue, index) {
                 subtaskHTMLs.reverse();
                 field.querySelector("span.ghx-extra-field-content").innerHTML = subtaskHTMLs.join(", ");
             }).catch(function(err) {
-                console.error("Jira Enricher: " + err);
+                console.error([`Jira Enricher: Getting sub task data`, err]);
             });
         }
 
@@ -145,14 +145,14 @@ function enrichIssue(options, issue, index) {
             try {
                 addRank(issue, index);
             } catch (e) {
-                console.error("Jira Enricher: Failed to add rank.")
+                console.error([`Jira Enricher: Failed to add rank.`, e])
             }
         }
         if (options.fixColors) {
             try {
                 fixColors(issue);
             } catch (e) {
-                console.error("Jira Enricher: Failed to fix colours.")
+                console.error([`Jira Enricher: Failed to fix colours.`, e])
             }
         }
         if (options.fixFlags) {
@@ -166,7 +166,7 @@ function enrichIssue(options, issue, index) {
             try {
                 fixSubtasks(issue);
             } catch (e) {
-                console.error("Jira Enricher: Failed to fix sub tasks.")
+                console.error([`Jira Enricher: Failed to fix sub tasks.`, e])
             }
         }
     }
