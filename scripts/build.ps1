@@ -20,7 +20,7 @@ if ($IsReleaseBuild) {
 
     Copy-Item -Path './src/*' -Destination './obj/release/' -Force -Recurse
 
-    Write-Host "Minifying"
+    Write-Host "Minifying..."
     Invoke-Expression "`./scripts/minify_css.ps1` './obj/release/'"
     Invoke-Expression "`./scripts/minify_js.ps1` './obj/release/'"
 
