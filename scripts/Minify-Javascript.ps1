@@ -14,24 +14,22 @@ catch [System.Reflection.ReflectionTypeLoadException] {
     Write-Error "Message: $($_.Exception.Message)`nStackTrace: $($_.Exception.StackTrace)`nLoaderExceptions: $($_.Exception.LoaderExceptions)"
 }
 
-$files = get-childitem $folder -recurse -force -include *.js
+$jsCompressor = New-Object -TypeName Yahoo.Yui.Compressor.JavaScriptCompressor
+#$jsCompressor.DisableOptimizations = $true
+#$jsCompressor.ObfuscateJavascript = $false
+#$jsCompressor.IgnoreEval = $true
+#$jsCompressor.PreserveAllSemicolons = $true
 
+$files = get-childitem $folder -recurse -force -include *.js
 $i = 0
 $total = ($files | Measure-Object ).Count
-
-$jsCompressor = New-Object -TypeName Yahoo.Yui.Compressor.JavaScriptCompressor
-$jsCompressor.DisableOptimizations = $true
-$jsCompressor.ObfuscateJavascript = $false
-$jsCompressor.IgnoreEval = $true
-$jsCompressor.PreserveAllSemicolons = $true
-
 foreach ($file in $files) {
     try {
         $content = [IO.File]::ReadAllText($file.FullName)
         $compressedContent = $jsCompressor.Compress($content)
         Set-ItemProperty $file.FullName -name IsReadOnly -value $false
         [IO.File]::WriteAllText($file.FullName, $compressedContent)
-        Write-Progress -Activity 'Minifying JS' -PercentComplete (($i / $total) * 100)
+        Write-Progress -Activity 'Minify-Javascript' -Status "Processing $($file.FullName)" -PercentComplete (($i / $total) * 100)
         $i++
     }
     catch [EcmaScript.NET.EcmaScriptRuntimeException] {

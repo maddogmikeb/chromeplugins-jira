@@ -28,11 +28,11 @@ foreach ($file in $files) {
         Set-ItemProperty $file.FullName -name IsReadOnly -value $false
         [IO.File]::WriteAllText($file.FullName, $compressedContent)
 
-        Write-Progress -Activity 'Minifying' -PercentComplete (($i / $total) * 100)
+        Write-Progress -Activity 'Minify-CSS' -Status "Processing $($file.FullName)" -PercentComplete (($i / $total) * 100)
         $i++
     }
     catch [EcmaScript.NET.EcmaScriptRuntimeException] {
-     Write-Warning "File: $($file.FullName)`nMessage: $($_)`nLineNumber: $($_.Exception.LineNumber)`nLineSource: $($_.Exception.LineSource)`nColumnNumber: $($_.Exception.ColumnNumber)"
+        Write-Warning "File: $($file.FullName)`nMessage: $($_)`nLineNumber: $($_.Exception.LineNumber)`nLineSource: $($_.Exception.LineSource)`nColumnNumber: $($_.Exception.ColumnNumber)"
     }
 }
 

@@ -3,7 +3,9 @@ Param(
     [bool]$IsReleaseBuild
 )
 
-Write-Host "Building..."
+$manifest = Get-Content -Raw -Path './src/manifest.json' | ConvertFrom-Json
+
+Write-Host "Building $($manifest.name) $($manifest.version) ($(if ($IsReleaseBuild) { "Release" } else { "Debug" }))"
 
 if (!(Test-Path -Path './obj/')) {
     New-Item -ItemType directory -Path './obj/'
@@ -21,17 +23,18 @@ if ($IsReleaseBuild) {
     Copy-Item -Path './src/*' -Destination './obj/release/' -Force -Recurse
 
     Write-Host "Minifying..."
-    Invoke-Expression "`./scripts/minify_css.ps1` './obj/release/'"
-    Invoke-Expression "`./scripts/minify_js.ps1` './obj/release/'"
+    Invoke-Expression "`./scripts/Minify-CSS.ps1` './obj/release/'"
+    Invoke-Expression "`./scripts/Minify-Javascript.ps1` './obj/release/'"
 
-    Write-Host "Creating Archive"
-    Compress-Archive -Path './obj/release/*' -DestinationPath './obj/release/Jira Enricher.zip' -force
+    Write-Host "Archiving..."
+    Compress-Archive -Path "./obj/release/*" -DestinationPath "./obj/release/$($manifest.name).zip" -force
 
-    Remove-Item './obj/release/*' -Exclude 'Jira Enricher.zip' -Force -Recurse
+    Write-Host "Cleaning..."
+    Remove-Item "./obj/release/*" -Exclude "$($manifest.name).zip" -Force -Recurse
 }
 else {
     Get-ChildItem -Path './obj/debug' -Include * -File -Recurse | ForEach-Object { $_.Delete() }
     Copy-Item -Path './src/*' -Destination './obj/debug/' -Force -Recurse
 }
 
-Write-Host "Building Complete."
+Write-Host "Complete."

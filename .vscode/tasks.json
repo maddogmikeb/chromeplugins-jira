@@ -60,7 +60,7 @@
             "problemMatcher": []
         },
         {
-            "label": "Test",
+            "label": "Test (Manual)",
             "type": "shell",
             "command": "& '${workspaceFolder}\\scripts\\test.ps1'",
             "group": {
