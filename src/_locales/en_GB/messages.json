@@ -1,0 +1,8 @@
+{
+    "appName": {
+        "message": "Jira Enricher"
+    },
+    "appDesc": {
+        "message": "This extension fixes some of the flaws of Jira's kanban boards!"
+    }
+}
